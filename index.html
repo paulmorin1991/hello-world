@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 Phrases Aléatoires en Français</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+
+        .sentences-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .sentence {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .sentence:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .sentence-number {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 30px auto 0;
+            display: block;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .sentence {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>10 Phrases Aléatoires en Français</h1>
+        <div class="sentences-container" id="sentencesContainer">
+            <!-- Les phrases seront générées ici -->
+        </div>
+        <button class="refresh-btn" onclick="generateSentences()">Nouvelles Phrases</button>
+    </div>
+
+    <script>
+        // Collection de phrases françaises variées
+        const frenchSentences = [
+            "Le chat noir dort paisiblement sur le canapé rouge.",
+            "Marie prépare un délicieux gâteau au chocolat pour l'anniversaire.",
+            "Les enfants jouent joyeusement dans le parc ensoleillé.",
+            "Pierre lit un livre passionnant sous le grand chêne.",
+            "La pluie tambourine doucement contre les fenêtres de la maison.",
+            "Sophie achète des fleurs colorées au marché du village.",
+            "Le train arrive en gare avec quinze minutes de retard.",
+            "Grand-mère raconte des histoires merveilleuses à ses petits-enfants.",
+            "Les oiseaux chantent mélodieusement dans les arbres du jardin.",
+            "Thomas prépare ses bagages pour son voyage en Italie.",
+            "La bibliothèque municipale ferme ses portes à dix-huit heures.",
+            "Les étudiants étudient assidûment pour leurs examens de fin d'année.",
+            "Le boulanger prépare le pain frais tous les matins à l'aube.",
+            "Caroline peint un magnifique paysage de montagne.",
+            "Le chien court rapidement après la balle dans le jardin.",
+            "Les touristes visitent le château médiéval avec émerveillement.",
+            "Papa répare la voiture dans le garage avec ses outils.",
+            "Les fleurs du jardin embaument l'air de leur parfum délicat.",
+            "Le professeur explique la leçon avec patience et clarté.",
+            "Maman cuisine un pot-au-feu savoureux pour le dîner.",
+            "Les nuages blancs flottent paisiblement dans le ciel bleu.",
+            "Antoine joue du piano avec une grande passion musicale.",
+            "La pharmacienne conseille gentiment les clients sur leurs médicaments.",
+            "Les vagues de l'océan s'écrasent puissamment contre les rochers.",
+            "Lucie cueille des framboises mûres dans le potager familial.",
+            "Le facteur distribue le courrier dans tout le quartier.",
+            "Les feuilles d'automne tombent gracieusement des arbres dorés.",
+            "Robert répare minutieusement sa montre ancienne avec précision.",
+            "La neige recouvre délicatement les toits du petit village.",
+            "Emma dessine un portrait de sa meilleure amie.",
+            "Le vent souffle fortement dans les branches des sapins.",
+            "Les enfants construisent un château de sable sur la plage.",
+            "Madame Dupont arrose tendrement ses géraniums sur le balcon.",
+            "Le pompier sauve courageusement le chat coincé dans l'arbre.",
+            "Julie apprend l'espagnol avec enthousiasme tous les soirs.",
+            "Les abeilles butinent laborieusement les fleurs du champ de lavande.",
+            "Le menuisier fabrique une table en bois massif.",
+            "Les étoiles brillent majestueusement dans la nuit claire.",
+            "Vincent photographie les paysages magnifiques de la campagne.",
+            "La grand-mère tricote un pull chaud pour son petit-fils.",
+            "Les cyclistes pédalent énergiquement sur la piste cyclable.",
+            "Sylvie cultive des tomates juteuses dans son jardin potager.",
+            "Le musicien accorde soigneusement sa guitare avant le concert.",
+            "Les papillons voltigent gracieusement autour des fleurs multicolores.",
+            "Nicolas répare la clôture cassée avec des planches neuves.",
+            "La rivière coule tranquillement à travers la vallée verdoyante.",
+            "Isabelle organise méticuleusement sa bibliothèque personnelle.",
+            "Les randonneurs admirent le panorama depuis le sommet de la colline.",
+            "Le jardinier plante des bulbes de tulipes pour le printemps.",
+            "Les mouettes crient bruyamment au-dessus du port de pêche."
+        ];
+
+        function getRandomSentences(count) {
+            const shuffled = [...frenchSentences].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function generateSentences() {
+            const container = document.getElementById('sentencesContainer');
+            const randomSentences = getRandomSentences(10);
+            
+            container.innerHTML = '';
+            
+            randomSentences.forEach((sentence, index) => {
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.className = 'sentence';
+                sentenceDiv.innerHTML = `<span class="sentence-number">${index + 1}.</span>${sentence}`;
+                container.appendChild(sentenceDiv);
+            });
+        }
+
+        // Générer les phrases au chargement de la page
+        document.addEventListener('DOMContentLoaded', generateSentences);
+    </script>
+</body>
+</html>
