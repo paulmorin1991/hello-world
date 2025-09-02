@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon App Mobile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 30px 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .task-list {
+            margin-top: 20px;
+        }
+
+        .task-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+            border-left-color: #28a745;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .stats {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .mobile-tips {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .mobile-tips h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .mobile-tips ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .mobile-tips li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .mobile-tips li:before {
+            content: "📱";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Optimisations pour écrans tactiles */
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                max-width: none;
+            }
+            
+            body {
+                padding: 10px;
+            }
+        }
+
+        /* Animation de chargement */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Mon App Mobile</h1>
+            <p>Développée entièrement sur Android !</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-group">
+                <label for="taskInput">Nouvelle tâche :</label>
+                <input type="text" id="taskInput" placeholder="Entrez votre tâche...">
+            </div>
+            
+            <button class="btn" onclick="addTask()">➕ Ajouter</button>
+            <button class="btn" onclick="clearAll()" style="background: #dc3545;">🗑️ Tout effacer</button>
+            
+            <div class="stats" id="stats">
+                <strong>📊 Statistiques</strong><br>
+                Total: <span id="totalTasks">0</span> | 
+                Complétées: <span id="completedTasks">0</span>
+            </div>
+            
+            <div class="task-list" id="taskList"></div>
+            
+            <div class="mobile-tips">
+                <h3>💡 Conseils pour développer sur mobile</h3>
+                <ul>
+                    <li>Utilisez un éditeur comme Acode, Spck Editor</li>
+                    <li>Testez avec Chrome DevTools mobile</li>
+                    <li>Privilégiez les frameworks légers</li>
+                    <li>Utilisez GitHub Codespaces</li>
+                    <li>Déployez avec Netlify/Vercel</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stockage local pour persistance
+        let tasks = JSON.parse(localStorage.getItem('mobileTasks')) || [];
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTasks();
+            updateStats();
+            
+            // Support pour Enter sur mobile
+            document.getElementById('taskInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
+        });
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            
+            if (taskText === '') {
+                alert('⚠️ Veuillez entrer une tâche !');
+                return;
+            }
+            
+            const task = {
+                id: Date.now(),
+                text: taskText,
+                completed: false,
+                createdAt: new Date().toLocaleString('fr-FR')
+            };
+            
+            tasks.unshift(task);
+            saveTasks();
+            renderTasks();
+            updateStats();
+            
+            input.value = '';
+            input.focus();
+            
+            // Animation de succès
+            showToast('✅ Tâche ajoutée !');
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(task => 
+                task.id === id ? {...task, completed: !task.completed} : task
+            );
+            saveTasks();
+            renderTasks();
+            updateStats();
+        }
+
+        function deleteTask(id) {
+            if (confirm('🗑️ Supprimer cette tâche ?')) {
+                tasks = tasks.filter(task => task.id !== id);
+                saveTasks();
+                renderTasks();
+                updateStats();
+                showToast('🗑️ Tâche supprimée !');
+            }
+        }
+
+        function clearAll() {
+            if (confirm('⚠️ Supprimer toutes les tâches ?')) {
+                tasks = [];
+                saveTasks();
+                renderTasks();
+                updateStats();
+                showToast('🧹 Toutes les tâches supprimées !');
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #888;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📝</div>
+                        <p>Aucune tâche pour le moment</p>
+                        <p style="font-size: 14px;">Ajoutez votre première tâche !</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            taskList.innerHTML = tasks.map(task => `
+                <div class="task-item ${task.completed ? 'completed' : ''}" 
+                     onclick="toggleTask(${task.id})"
+                     style="cursor: pointer;">
+                    <div>
+                        <div style="font-weight: 600;">
+                            ${task.completed ? '✅' : '⏳'} ${task.text}
+                        </div>
+                        <div style="font-size: 12px; color: #888; margin-top: 5px;">
+                            ${task.createdAt}
+                        </div>
+                    </div>
+                    <button class="delete-btn" 
+                            onclick="event.stopPropagation(); deleteTask(${task.id})"
+                            title="Supprimer">
+                        ✕
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const total = tasks.length;
+            const completed = tasks.filter(task => task.completed).length;
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('mobileTasks', JSON.stringify(tasks));
+        }
+
+        function showToast(message) {
+            // Toast simple pour mobile
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #333;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 20px;
+                z-index: 1000;
+                font-size: 14px;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 2000);
+        }
+
+        // PWA - Service Worker pour fonctionnement hors ligne
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
